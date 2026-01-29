@@ -101,7 +101,6 @@ public class PtyCommandLine extends GeneralCommandLine implements CommandLineWit
 
   @Override
   protected @NotNull Process createProcess(@NotNull ProcessBuilder processBuilder) throws IOException {
-    adjustWinConPtyForPowerShellLanguageHost();
     if (getInputFile() == null && !isProcessCreatorSet() && tryGetEel() == null) {
       try {
         return startProcessWithPty(processBuilder.command());

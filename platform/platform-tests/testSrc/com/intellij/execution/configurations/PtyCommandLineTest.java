@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 public class PtyCommandLineTest extends GeneralCommandLineTest {
   public static final @ClassRule ApplicationRule appRule = new ApplicationRule();
+  private static final String INTELLIJ_POWERSHELL_PARENT_PID = "INTELLIJ_POWERSHELL_PARENT_PID";
 
   @Override
   protected @NotNull String filterExpectedOutput(@NotNull String output) {
@@ -50,4 +51,12 @@ public class PtyCommandLineTest extends GeneralCommandLineTest {
 
   @Ignore @Test @Override
   public void redirectInput() { }
+
+  @Test
+  public void powershellLanguageHostDisablesConPty() {
+    org.junit.Assume.assumeTrue(SystemInfo.isWindows);
+    PtyCommandLine commandLine = new PtyCommandLine();
+    commandLine.getEnvironment().put(INTELLIJ_POWERSHELL_PARENT_PID, "1");
+    org.junit.Assert.assertFalse(commandLine.getPtyOptions().useWinConPty());
+  }
 }
