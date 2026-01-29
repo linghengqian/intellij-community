@@ -32,6 +32,7 @@ import java.util.function.LongConsumer;
 public class PtyCommandLine extends GeneralCommandLine implements CommandLineWithSuspendedProcessCallback {
   private static final Logger LOG = Logger.getInstance(PtyCommandLine.class);
   private static final String RUN_PROCESSES_WITH_PTY = "run.processes.with.pty";
+  private static final String INTELLIJ_POWERSHELL_PARENT_PID = "INTELLIJ_POWERSHELL_PARENT_PID";
 
   public static final int MAX_COLUMNS = 2500;
 
@@ -100,6 +101,7 @@ public class PtyCommandLine extends GeneralCommandLine implements CommandLineWit
 
   @Override
   protected @NotNull Process createProcess(@NotNull ProcessBuilder processBuilder) throws IOException {
+    adjustWinConPtyForPowerShellLanguageHost();
     if (getInputFile() == null && !isProcessCreatorSet() && tryGetEel() == null) {
       try {
         return startProcessWithPty(processBuilder.command());
@@ -140,7 +142,14 @@ public class PtyCommandLine extends GeneralCommandLine implements CommandLineWit
   }
 
   public @NotNull LocalPtyOptions getPtyOptions() {
+    adjustWinConPtyForPowerShellLanguageHost();
     return myOptionsBuilder.build();
+  }
+
+  private void adjustWinConPtyForPowerShellLanguageHost() {
+    if (SystemInfo.isWindows && getEnvironment().containsKey(INTELLIJ_POWERSHELL_PARENT_PID)) {
+      myOptionsBuilder.useWinConPty(false);
+    }
   }
 
   @ApiStatus.Internal
