@@ -32,7 +32,7 @@ import java.util.function.LongConsumer;
 public class PtyCommandLine extends GeneralCommandLine implements CommandLineWithSuspendedProcessCallback {
   private static final Logger LOG = Logger.getInstance(PtyCommandLine.class);
   private static final String RUN_PROCESSES_WITH_PTY = "run.processes.with.pty";
-  private static final String INTELLIJ_POWERSHELL_PARENT_PID = "INTELLIJ_POWERSHELL_PARENT_PID";
+  static final String INTELLIJ_POWERSHELL_PARENT_PID = "INTELLIJ_POWERSHELL_PARENT_PID";
 
   public static final int MAX_COLUMNS = 2500;
 
